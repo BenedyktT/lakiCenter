@@ -1,0 +1,19 @@
+@import "./global";
+
+$bg-grey: #C4C4C4;
+//container
+ .container{
+    margin-right: auto; /* 1 */
+    margin-left:  auto; /* 1 */
+    max-width: 960px; /* 2 */
+    padding-right: 10px; /* 3 */
+    padding-left:  10px; /* 3 */
+ }
+.App{
+    width:85vw;
+    text-align:center;
+    margin: 1.2rem auto;
+    background: $bg-grey;
+    padding:1rem
+    
+}
