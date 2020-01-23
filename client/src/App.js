@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "./logo.svg";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import "./App.scss";
 
 import Calendar from "./components/Calendar";
+import AvailabilityTable from "./components/AvailabilityTable";
+import { CalendarState } from "./context";
 
 function App() {
 	return (
@@ -12,7 +14,10 @@ function App() {
 			<header className="App-header">
 				<img src={logo} className="App-logo" alt="logo" />
 			</header>
-			<Calendar />
+			<CalendarState>
+				<Calendar />
+				<AvailabilityTable />
+			</CalendarState>
 		</div>
 	);
 }
