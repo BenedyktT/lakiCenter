@@ -11,7 +11,7 @@ export default class Calendar extends Component {
   render() {
     return (
       <CalendarConsumer>
-        {({ startDate, endDate, dispatch }) => {
+        {({ startDate, endDate, dispatch, isDateRangeSelected }) => {
           return (
             <div className="container">
               <DateRangePicker

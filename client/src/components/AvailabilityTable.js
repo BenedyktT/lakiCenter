@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { CalendarConsumer } from "../context";
+import { Context } from "../context/index";
 
 const AvailabilityTable = () => {
+  const context = useContext(Context);
+  const { startDate, endDate, fetch, availability } = context;
+  useEffect(() => {
+    fetch();
+  }, []);
   return (
     <CalendarConsumer>
-      {({ startDate, endDate }) => {
+      {({ availability }) => {
+        if (availability) {
+        }
         return (
           <div className="table-wrapper container">
             <table className="blueTable">
@@ -19,13 +27,13 @@ const AvailabilityTable = () => {
               <tbody>
                 <tr>
                   <td>Economy</td>
-                  <td>19000</td>
-                  <td>15000</td>
+                  <td>{availability ? availability[1].availability : "?"}</td>
+                  <td>{availability ? availability[1].rate : "?"}</td>
                 </tr>
                 <tr>
                   <td>Standard</td>
-                  <td>13000</td>
-                  <td>12500</td>
+                  <td>{availability ? availability[0].availability : "?"}</td>
+                  <td>{availability ? availability[0].rate : "?"}</td>
                 </tr>
               </tbody>
             </table>

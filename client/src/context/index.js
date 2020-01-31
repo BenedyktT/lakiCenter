@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
 import axios from "axios";
-const Context = React.createContext();
+export const Context = React.createContext();
 export const reducer = (state, action) => {
   const { payload, type } = action;
   switch (type) {
@@ -12,7 +12,9 @@ export const reducer = (state, action) => {
       };
     case "SET_CALENDAR":
       const { startDate, endDate } = payload;
-      return { ...state, startDate, endDate };
+      if (startDate && endDate)
+        return { ...state, isDateRangeSelected: true, startDate, endDate };
+      return { ...state, startDate, endDate, isDateRangeSelected: false };
 
     default:
       return state;
@@ -22,37 +24,36 @@ export class CalendarState extends React.Component {
   state = {
     startDate: moment(),
     endDate: moment().add(1, "day"),
+    isDateRangeSelected: null,
     focusedInput: null,
-    test: null,
+    availability: null,
     dispatch: action => {
       this.setState(state => reducer(state, action));
-    }
-  };
-
-  // nie dziala warunek component updatuje sie czy end date null co powoduje error :/
-
-  /* async componentDidUpdate(prevProps, prevState) {
-    if (
-      !moment(prevState.startDate).isSame(this.state.startDate, "day") ||
-      (!moment(prevState.endDate).isSame(this.state.endDate, "day") &&
-        typeof this.state.startDate === "object" &&
-        typeof this.state.endDate === "object")
-    ) {
+    },
+    fetch: async () => {
       try {
         let { startDate, endDate } = this.state;
+
         startDate = moment(startDate).format("YYYY-MM-DD");
         endDate = moment(endDate).format("YYYY-MM-DD");
         const res = await axios.get(
           `/availability/${startDate}/${endDate}/LAKI`
         );
-
-        this.setState(() => ({ test: res.data }));
-        console.log(this.state.test);
+        this.setState(() => ({ availability: res.data }));
       } catch (error) {
         console.error(error);
       }
     }
-  } */
+  };
+
+  async componentDidUpdate(prevProps, prevState) {
+    const { startDate, endDate } = this.state;
+    if (this.state.isDateRangeSelected && this.state.test === prevState.test) {
+      if (startDate !== prevState.startDate || endDate !== prevState.endDate) {
+        this.state.fetch();
+      }
+    }
+  }
 
   render() {
     const { children } = this.props;
