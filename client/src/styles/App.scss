@@ -1,4 +1,6 @@
+@import "./styleClasses.scss";
 @import "./global";
+
 
 $bg-grey: #C4C4C4;
 //container
@@ -64,4 +66,7 @@ table.blueTable {
   
 
 
- 
+ .App-header{
+   display:flex;
+   justify-content: space-between;
+ }

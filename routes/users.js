@@ -31,8 +31,10 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
+		console.log(req.body);
+		let { name, password } = req.body;
+		name = name.trim().toLowerCase();
 
-		const { name, password } = req.body;
 		try {
 			// see if user exists
 			let user = await User.findOne({ name });
@@ -50,7 +52,7 @@ router.post(
 			const payload = {
 				user: user.id
 			};
-
+			console.log(process.env.jwtSecret);
 			jwt.sign(
 				payload,
 				process.env.jwtSecret,
@@ -68,6 +70,7 @@ router.post(
 );
 
 //@register user post
+//@private
 router.post(
 	"/register",
 	auth,
@@ -87,10 +90,11 @@ router.post(
 		} else {
 			console.log(req.body);
 		}
-		const { name, password } = req.body;
+		let { name, password } = req.body;
+		name = name.trim().toLowerCase();
+		const userName = await User.findById(req.user);
 		let isUserExist = await User.findOne({ name });
-		const user = await User.findById(req.user);
-		if (user.name !== "adminLaki") {
+		if (userName !== "adminlaki") {
 			res.status(402).json("Unauthorized");
 		}
 

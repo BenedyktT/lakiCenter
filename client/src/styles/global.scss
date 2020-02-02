@@ -473,3 +473,24 @@ $break-large: 1024px;
       }
     }
   }
+
+
+  //forms and inputs
+.form {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 50%;
+  grid-gap: 1rem;
+  @include respond-to(handhelds) {
+    align-items: center;
+  }
+  margin: auto;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.input-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 0.5rem;
+}

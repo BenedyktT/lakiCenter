@@ -2,8 +2,9 @@ var xmldoc = require("xmldoc");
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
+const auth = require("../middleware/auth");
 
-router.get("/:arrival/:departure/:hotel", async (req, res) => {
+router.get("/:arrival/:departure/:hotel", auth, async (req, res) => {
 	const arrival = req.params.arrival;
 	const departure = req.params.departure;
 	const hotel = req.params.hotel || process.env.Hotel;
