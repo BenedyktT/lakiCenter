@@ -3,7 +3,9 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const auth = require("../middleware/auth");
-
+router.get("/", (req, res) => {
+	res.json("hello");
+});
 router.get("/:arrival/:departure/:hotel", auth, async (req, res) => {
 	const arrival = req.params.arrival;
 	const departure = req.params.departure;

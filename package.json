@@ -22,8 +22,11 @@
     "express": "^4.17.1",
     "express-validator": "^6.3.1",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
     "mongoose": "^5.8.9",
     "react-router-dom": "^5.1.2",
+    "xml-js": "^1.6.11",
+    "xml-to-json-stream": "^1.1.0",
     "xmldoc": "^1.1.2"
   },
   "devDependencies": {

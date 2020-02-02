@@ -8,9 +8,9 @@ const Dashboard = () => {
 	return (
 		<div>
 			<CalendarState>
-				{/* 		<div className="container">
+				<div className="container">
 					<Options />
-				</div> */}
+				</div>
 
 				<Calendar />
 				<AvailabilityTable />
