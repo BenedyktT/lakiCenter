@@ -20,4 +20,10 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`server start on port ${PORT}`));
+app.listen(PORT, () => {
+	wakeUpDyno({
+		url: "http://laki-avail.herokuapp.com/", // url string
+		interval: 60000 * 25 // interval in milliseconds (1 minute in this example)
+	}).start();
+	console.log(`server start on port ${PORT}`);
+});
