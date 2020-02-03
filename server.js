@@ -4,6 +4,7 @@ require("dotenv").config();
 const connectDB = require("./config/config");
 connectDB();
 app.use(express.json({ extended: false }));
+const path = require("path");
 const wakeUpDyno = require("./wakeUpDyno");
 
 app.use("/availability", require("./routes/availability"));
