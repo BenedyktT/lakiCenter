@@ -6,12 +6,13 @@
   "scripts": {
     "client": "npm start --prefix client",
     "server": "nodemon server --ignore './client/'",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BenedyktT/calendarConnect.git",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "url": "https://github.com/BenedyktT/calendarConnect.git"
+    
   },
   "author": "Benedykt Tyminski",
   "license": "ISC",
