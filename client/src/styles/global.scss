@@ -494,3 +494,7 @@ $break-large: 1024px;
   grid-template-columns: 1fr;
   grid-gap: 0.5rem;
 }
+
+*{
+  box-sizing: border-box;
+}

@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const auth = require("../middleware/auth");
+const convert = require("xml-js");
 router.get("/", (req, res) => {
 	res.json("hello");
 });
@@ -17,16 +18,58 @@ router.get("/:arrival/:departure/:hotel", auth, async (req, res) => {
 		const response = await axios.get(
 			`https://api.roomercloud.net/services/bookingapi/availability1?hotel=${hotel}&channelCode=HOT&channelManagerCode=OWN&arrivalDate=${arrival}&departureDate=${departure}`
 		);
-		const document = new xmldoc.XmlDocument(response.data);
+		const result = convert.xml2js(response.data, { compact: true, spaces: 4 });
 
-		const availability = document.children[1].children.map(child => {
-			return {
-				room: child.attr.availabilityBaseCode,
-				desc: child.attr.description,
-				rate: child.children[1].children[0].attr.rate,
-				availability: child.children[1].children[0].attr.availability
-			};
-		});
+		const availability = result.availability.inventory.inventoryItem
+			.map(room => {
+				const isArray = room.availabilityAndRates.day.length;
+				const dayAvail = isArray
+					? room.availabilityAndRates.day.map(e => ({
+							available: e._attributes.availability,
+							date: e._attributes.date,
+							rate: e._attributes.rate
+					  }))
+					: {
+							available: room.availabilityAndRates.day._attributes.availability,
+							date: room.availabilityAndRates.day._attributes.date,
+							rate: room.availabilityAndRates.day._attributes.rate
+					  };
+
+				return {
+					room: {
+						desc: room._attributes.inventoryCode,
+						dayAvail
+					}
+				};
+			})
+			.map(e => {
+				const dayAvail = e.room.dayAvail.length
+					? e.room.dayAvail.reduce(
+							(acc, curr) => {
+								if (parseInt(curr.available) < parseInt(acc.available)) {
+									return {
+										...acc,
+										available: (acc.available = curr.available),
+										rate: parseInt(acc.rate) + parseInt(curr.rate)
+									};
+								} else
+									return {
+										...acc,
+										rate: parseInt(acc.rate) + parseInt(curr.rate)
+									};
+							},
+							{ available: 40, rate: 0 }
+					  )
+					: {
+							available: e.room.dayAvail.available,
+							rate: e.room.dayAvail.rate
+					  };
+				return {
+					dayAvail,
+					desc: e.room.desc,
+					rate: e.room.rate
+				};
+			});
 
 		res.json(availability);
 	} catch (error) {

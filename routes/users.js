@@ -5,9 +5,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const axios = require("axios");
-var convert = require("xml-js");
-const moment = require("moment");
+
 // @route GET api/auth
 // @desc
 // @access Public
@@ -119,72 +117,5 @@ router.post(
 		}
 	}
 );
-
-router.get("/:arrival/:departure/:hotel", async (req, res) => {
-	const arrival = req.params.arrival;
-	const departure = req.params.departure;
-	const hotel = req.params.hotel || process.env.Hotel;
-	if (!arrival || !departure) {
-		res.status(404).json("include arrival and departure date");
-	}
-	try {
-		const response = await axios.get(
-			`https://api.roomercloud.net/services/bookingapi/availability1?hotel=${hotel}&channelCode=HOT&channelManagerCode=OWN&arrivalDate=${arrival}&departureDate=${departure}`,
-			{
-				headers: { Accept: "*/json" }
-			}
-		);
-		const result = convert.xml2js(response.data, { compact: true, spaces: 4 });
-		/* const test = result.availability.inventory.inventoryItem.map(roomType => {
-			return [
-				{
-					desc: roomType._attributes.availabilityBaseCode,
-					availability:
-						roomType.availabilityAndRates.day._attributes.availability,
-					date: roomType.availabilityAndRates.day._attributes.date
-				}
-			];
-		}); */
-		/* 	const availability = document.children[1].children.map(child => {
-			return {
-				room: child.attr.availabilityBaseCode,
-				desc: child.attr.description,
-				rate: child.children[1].children[0].attr.rate,
-				availability: child.children[1].children[0].attr.availability
-			};
-		}); */
-		const availability = result.availability.inventory.inventoryItem.map(
-			room => {
-				return {
-					room: {
-						desc: room._attributes.availabilityBaseCode,
-						dayAvail: room.availabilityAndRates.day.map(e => ({
-							available: e._attributes.availability,
-							date: e._attributes.date
-						}))
-					}
-				};
-			}
-		);
-		const test = availability.map(e => {
-			return {
-				availability: e.room.dayAvail.reduce(
-					(acc, curr) => {
-						console.log(acc);
-						if (curr.available < acc.available) {
-							return (acc = curr);
-						} else return acc;
-					},
-					{ available: 40 }
-				),
-				desc: e.room.desc
-			};
-		});
-		res.json(availability);
-	} catch (error) {
-		console.error(error);
-		res.json(error);
-	}
-});
 
 module.exports = router;

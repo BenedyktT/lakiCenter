@@ -11,8 +11,6 @@ const AvailabilityTable = () => {
 	return (
 		<CalendarConsumer>
 			{({ availability }) => {
-				if (availability) {
-				}
 				return (
 					<div className="table-wrapper container">
 						<table className="blueTable">
@@ -27,13 +25,17 @@ const AvailabilityTable = () => {
 							<tbody>
 								<tr>
 									<td>Economy</td>
-									<td>{availability ? availability[1].availability : "?"}</td>
-									<td>{availability ? availability[1].rate : "?"}</td>
+									<td>
+										{availability ? availability[1].dayAvail.available : "?"}
+									</td>
+									<td>{availability ? availability[1].dayAvail.rate : "?"}</td>
 								</tr>
 								<tr>
 									<td>Standard</td>
-									<td>{availability ? availability[0].availability : "?"}</td>
-									<td>{availability ? availability[0].rate : "?"}</td>
+									<td>
+										{availability ? availability[2].dayAvail.available : "?"}
+									</td>
+									<td>{availability ? availability[2].dayAvail.rate : "?"}</td>
 								</tr>
 							</tbody>
 						</table>

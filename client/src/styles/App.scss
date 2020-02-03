@@ -13,9 +13,12 @@ $bg-grey: #C4C4C4;
  }
 .App{
     width:85vw;
-    text-align:center;
     margin: 1.2rem auto;
     background: $bg-grey;
+    text-align: center;
+    @include respond-to(handhelds){
+      text-align: inherit;
+    }
     padding:1rem;
     min-width:240px
     

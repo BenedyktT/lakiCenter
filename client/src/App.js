@@ -32,7 +32,7 @@ function App() {
 		}
 	}, []);
 	return (
-		<div className="App container">
+		<div className="App">
 			<Router>
 				<header className="App-header">
 					<img src={logo} className="App-logo" alt="logo" />
