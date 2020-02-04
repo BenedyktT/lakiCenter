@@ -94,8 +94,8 @@ router.post(
 		name = name.trim().toLowerCase();
 		const userName = await User.findById(req.user);
 		let isUserExist = await User.findOne({ name });
-		if (userName !== "adminlaki") {
-			res.status(402).json("Unauthorized");
+		if (userName.name !== "adminlaki") {
+			return res.status(402).json("Unauthorized");
 		}
 
 		try {
