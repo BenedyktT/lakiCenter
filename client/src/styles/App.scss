@@ -1,5 +1,6 @@
 @import "./styleClasses.scss";
 @import "./global";
+@import "./buttons.scss";
 
 
 $bg-grey: #C4C4C4;
@@ -12,15 +13,14 @@ $bg-grey: #C4C4C4;
     padding-left:  10px; /* 3 */
  }
 .App{
-    width:85vw;
-    margin: 1.2rem auto;
-    background: $bg-grey;
+  
     text-align: center;
     @include respond-to(handhelds){
       text-align: inherit;
     }
     padding:1rem;
-    min-width:240px
+    min-width:240px;
+    height:100vh
     
 }
 
@@ -52,9 +52,9 @@ table.blueTable {
   }
   table.blueTable thead {
   
-    background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-    background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
-    background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+    background: -moz-linear-gradient(top, $blue-a 0%, $blue-b 66%, $blue-a  100%);
+    background: -webkit-linear-gradient(top, $blue-b 0%, $blue-b 66%, $blue-b 100%);
+    background: linear-gradient(to bottom, $pink-a 0%, $pink-a 66%, $pink-a 100%);
   
   }
   table.blueTable thead th {
@@ -72,4 +72,6 @@ table.blueTable {
  .App-header{
    display:flex;
    justify-content: space-between;
+   align-items: flex-start;
+   margin-bottom:2rem
  }

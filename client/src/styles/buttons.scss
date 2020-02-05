@@ -1,0 +1,12 @@
+.btn-nav {
+    display:flex;
+    align-items: center;
+    padding: 1rem;
+    background-color: $blue-primary;
+    color:white;
+    border-radius:5px;
+    transition: background-color 350ms ease
+}
+.btn-nav:hover {
+    background-color: $blue-a
+}

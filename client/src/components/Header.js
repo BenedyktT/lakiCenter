@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { logoutUser, loadUser } from "../redux/actions/auth";
 import logo from "../logo.svg";
 import { Link } from "react-router-dom";
 
 const Header = ({ isAuthenticated, logoutUser, name, loadUser }) => {
-	if (!name && isAuthenticated) {
-		loadUser();
-	}
-
 	return (
 		<header className="App-header">
-			<img src={logo} className="App-logo" alt="logo" />
+			<Link to="/">
+				<img src={logo} className="App-logo" alt="logo" />
+			</Link>
+			{/* 	{name === "adminlaki" && (
+				<Link className="btn btn-nav" to="/register">
+					Register
+				</Link>
+			)} */}
 			{isAuthenticated && (
 				<div className="">
-					<Link to="/login" onClick={() => logoutUser()}>
+					<Link
+						className="btn btn-nav"
+						to="/login"
+						onClick={() => logoutUser()}
+					>
 						Log Out
 					</Link>
 					<div>{name && name}</div>

@@ -1,6 +1,7 @@
 import React from "react";
 import AvailabilityTable from "./AvailabilityTable";
 import Calendar from "./Calendar";
+import { Link } from "react-router-dom";
 
 import Options from "./Options";
 

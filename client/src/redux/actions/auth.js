@@ -13,6 +13,7 @@ export const loginUser = data => async dispatch => {
 		type: LOGIN_USER,
 		payload: res.data
 	});
+	dispatch(loadUser());
 };
 
 export const loadUser = () => async dispatch => {

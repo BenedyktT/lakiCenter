@@ -1,27 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
 const Privateroute = ({
 	component: Component,
-
+	isAuthenticated,
+	loading,
+	name,
 	...rest
 }) => {
-	const { isAuthenticated, loading, name } = auth;
 	return (
 		<Route
 			{...rest}
 			render={props =>
-				isAuthenticated && !loading ? (
+				isAuthenticated && !loading && name === "adminlaki" ? (
 					<Component {...props} />
 				) : (
-					<Redirect to="/login" />
+					<Redirect to="/" />
 				)
 			}
 		/>
 	);
 };
 
-export default Privateroute;
+export default connect(state => ({
+	isAuthenticated: state.auth.isAuthenticated,
+	loading: state.auth.loading,
+	name: state.auth.name
+}))(Privateroute);
 
 {
 	/* */

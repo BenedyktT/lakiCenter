@@ -43,6 +43,10 @@ $margin-big-x: 5rem 0;
 $font-head: "Montserrat", Arial, Helvetica, sans-serif;
 $font-sub: "Roboto", Arial, Helvetica, cursive, sans-serif;
 
+*{
+  font-family: $font-head,$font-sub;
+}
+
 //constans
 .ml-2 {
   margin-left: 2rem;
