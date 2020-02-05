@@ -90,7 +90,7 @@ router.post(
 		} else {
 			console.log(req.body);
 		}
-		let { name, password } = req.body;
+		let { name, password, rate } = req.body;
 		name = name.trim().toLowerCase();
 		const userName = await User.findById(req.user);
 		let isUserExist = await User.findOne({ name });
@@ -105,7 +105,8 @@ router.post(
 
 			user = new User({
 				name,
-				password
+				password,
+				rate
 			});
 			const salt = await bcrypt.genSalt(10);
 			user.password = await bcrypt.hash(password, salt);

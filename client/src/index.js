@@ -3,12 +3,10 @@ import ReactDOM from "react-dom";
 
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { AuthState } from "./context/authContext";
 
 ReactDOM.render(
-	<AuthState>
-		<App />
-	</AuthState>,
+	<App />,
+
 	document.getElementById("root")
 );
 

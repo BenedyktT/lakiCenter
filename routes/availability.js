@@ -46,23 +46,27 @@ router.get("/:arrival/:departure/:hotel", auth, async (req, res) => {
 				const dayAvail = e.room.dayAvail.length
 					? e.room.dayAvail.reduce(
 							(acc, curr) => {
-								if (parseInt(curr.available) < parseInt(acc.available)) {
+								if (parseFloat(curr.available) < parseFloat(acc.available)) {
 									return {
 										...acc,
 										available: (acc.available = curr.available),
-										rate: parseInt(acc.rate) + parseInt(curr.rate)
+										rate: Math.floor(
+											parseFloat(acc.rate) + parseFloat(curr.rate)
+										)
 									};
 								} else
 									return {
 										...acc,
-										rate: parseInt(acc.rate) + parseInt(curr.rate)
+										rate: Math.floor(
+											parseFloat(acc.rate) + parseFloat(curr.rate)
+										)
 									};
 							},
 							{ available: 40, rate: 0 }
 					  )
 					: {
 							available: e.room.dayAvail.available,
-							rate: e.room.dayAvail.rate
+							rate: Math.floor(e.room.dayAvail.rate)
 					  };
 				return {
 					dayAvail,

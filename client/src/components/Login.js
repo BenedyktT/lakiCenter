@@ -1,12 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
-import { authContext } from "../context/authContext";
-import axios from "axios";
-import { header } from "express-validator";
+import { connect } from "react-redux";
+import { loginUser } from "../redux/actions/auth";
 
-const Login = ({ history }) => {
-	const auth = useContext(authContext);
-	const { dispatch, isAuthenticated, loading, token } = auth;
+const Login = ({ history, loginUser, isAuthenticated, loading }) => {
 	const [inputValue, setInputValue] = useState({ name: null, password: null });
 
 	const onSubmit = async e => {
@@ -16,17 +13,11 @@ const Login = ({ history }) => {
 			console.log("dispatch error");
 			return;
 		}
+		const data = inputValue;
 		try {
-			const data = inputValue;
-			const res = await axios.post("/user/login", data, {
-				headers: { "Content-Type": "application/json" }
-			});
-			dispatch({
-				type: "LOGIN_USER",
-				payload: res.data
-			});
+			loginUser(data);
 		} catch (error) {
-			console.log("something went wrong");
+			console.error("INCORRECT CREDENTIAL");
 		}
 	};
 	const onChange = e => {
@@ -69,4 +60,10 @@ const Login = ({ history }) => {
 	);
 };
 
-export default Login;
+export default connect(
+	state => ({
+		isAuthenticated: state.auth.isAuthenticated,
+		loading: state.auth.loading
+	}),
+	{ loginUser }
+)(Login);
