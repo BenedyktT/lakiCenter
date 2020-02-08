@@ -2,15 +2,18 @@ import React from "react";
 import AvailabilityTable from "./AvailabilityTable";
 import Calendar from "./Calendar";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import Options from "./Options";
 
-const Dashboard = () => {
+const Dashboard = ({ user }) => {
 	return (
 		<div>
-			{/* <div className="container">
+			{user === "adminlaki" && (
+				<div className="container">
 					<Options />
-				</div> */}
+				</div>
+			)}
 
 			<Calendar />
 			<AvailabilityTable />
@@ -25,4 +28,4 @@ const Dashboard = () => {
 	);
 };
 
-export default Dashboard;
+export default connect(state => ({ user: state.auth.name }))(Dashboard);

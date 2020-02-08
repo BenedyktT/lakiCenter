@@ -31,13 +31,17 @@ const AvailabilityTable = ({
 				<tbody>
 					{availability &&
 						availability
-							.filter(e => !e.desc.includes("1P") && !e.desc.includes("-5%"))
+							.filter(
+								e => /* !e.desc.includes("1P") &&  */ !e.desc.includes("-5%")
+							)
 							.sort((a, b) => (a.desc > b.desc ? 1 : -1))
 							.map(roomType => (
 								<tr key={roomType.desc}>
 									<td>{roomType.desc}</td>
 									<td>{roomType.dayAvail.available}</td>
-									<td>{roomType.dayAvail.rate} ISK</td>
+									<td>
+										{roomType.dayAvail.rate} {roomType.currency}
+									</td>
 								</tr>
 							))}
 				</tbody>
