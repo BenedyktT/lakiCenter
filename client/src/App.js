@@ -13,6 +13,7 @@ import store from "./redux/store";
 import setAuthToken from "./components/helper/setAuthToken";
 import Register from "./components/Register";
 import { loadUser } from "./redux/actions/auth";
+import Alert from "./components/Alert";
 
 const token = localStorage.getItem("token");
 if (token) {
@@ -20,14 +21,16 @@ if (token) {
 }
 function App() {
 	useEffect(() => {
-		store.dispatch(loadUser());
+		if (token) {
+			store.dispatch(loadUser());
+		}
 	}, []);
 	return (
 		<Provider store={store}>
 			<div className="App">
 				<Router>
 					<Header />
-
+					<Alert />
 					<Switch>
 						<AdminRoute exact path="/register" component={Register} />
 						<Privateroute exact path="/" component={Dashboard} />

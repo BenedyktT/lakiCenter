@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
-import PasswordWithGenerator from "react-password-with-generator";
 
-const Register = () => {
+import PasswordWithGenerator from "react-password-with-generator";
+import { registerUser } from "../redux/actions/auth";
+import { connect } from "react-redux";
+const Register = ({ registerUser }) => {
 	const [inputValue, setInputValue] = useState({
 		name: "",
-		password: "",
-		repeatPassword: ""
+		password: ""
 	});
 
 	const onSubmit = async e => {
@@ -18,7 +18,7 @@ const Register = () => {
 		}
 		const data = inputValue;
 		try {
-			/* loginUser(data); */
+			registerUser(data);
 		} catch (error) {
 			console.error("INCORRECT CREDENTIAL");
 		}
@@ -53,22 +53,22 @@ const Register = () => {
 						value={inputValue.password}
 					/>
 				</div>
-				<div className="input-container">
-					<label htmlFor="password">Repeat password:</label>
-					<input
-						onChange={onChange}
-						className="padding-small  margin-small-x "
-						name="repeatPassword"
-						type="text"
-						autoComplete="password"
-						value={inputValue.repeatPassword}
-					/>
-				</div>
 				<div className="">
 					<h1>Random password hint</h1>
-					{/* 	<div className="">
-						<PasswordWithGenerator />
-					</div> */}
+					<br />
+					<small>
+						Copy it to clipboard, and send to the customer with username
+					</small>
+					<br />
+					<div className="">
+						<PasswordWithGenerator
+							passwordNotMemorable={true}
+							onBlur={e => {
+								setInputValue({ ...inputValue, password: e.target.value });
+							}}
+							readOnly={true}
+						/>
+					</div>
 				</div>
 				<input
 					className="padding-small margin-y"
@@ -81,4 +81,4 @@ const Register = () => {
 	);
 };
 
-export default Register;
+export default connect(null, { registerUser })(Register);

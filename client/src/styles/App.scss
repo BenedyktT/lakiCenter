@@ -75,3 +75,20 @@ table.blueTable {
    align-items: flex-start;
    margin-bottom:2rem
  }
+
+ .alert-box{
+    width:85%;
+    margin:1rem auto;
+    top:15%;
+    color:white;
+    box-shadow: 2px 5px 10px 0.2px rgba($bg-grey,1);
+    text-align: center;;
+    padding:1rem;
+   
+ }
+ .danger{
+   background:$gradient-danger
+ }
+ .success {
+   background:$gradient-success
+ }

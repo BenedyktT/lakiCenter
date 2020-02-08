@@ -10,7 +10,7 @@ const Header = ({ isAuthenticated, logoutUser, name, loadUser }) => {
 			<Link to="/">
 				<img src={logo} className="App-logo" alt="logo" />
 			</Link>
-			{/* 	{name === "adminlaki" && (
+			{/* {name === "adminlaki" && (
 				<Link className="btn btn-nav" to="/register">
 					Register
 				</Link>

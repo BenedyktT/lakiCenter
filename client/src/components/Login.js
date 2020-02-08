@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { loginUser } from "../redux/actions/auth";
+import { setAlert } from "../redux/actions/alerts";
 
 const Login = ({ history, loginUser, isAuthenticated, loading }) => {
 	const [inputValue, setInputValue] = useState({ name: null, password: null });
@@ -10,14 +10,14 @@ const Login = ({ history, loginUser, isAuthenticated, loading }) => {
 		const { name, password } = inputValue;
 		e.preventDefault();
 		if (!name || !password) {
-			console.log("dispatch error");
+			setAlert("Fill all fields", "danger");
 			return;
 		}
 		const data = inputValue;
 		try {
 			loginUser(data);
 		} catch (error) {
-			console.error("INCORRECT CREDENTIAL");
+			setAlert("Invalid Credentials", "danger");
 		}
 	};
 	const onChange = e => {

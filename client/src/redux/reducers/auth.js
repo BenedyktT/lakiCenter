@@ -1,4 +1,9 @@
-import { LOGIN_USER, LOAD_USER, LOGOUT_USER } from "../actions/types";
+import {
+	LOGIN_USER,
+	LOAD_USER,
+	LOGOUT_USER,
+	REGISTER_USER
+} from "../actions/types";
 
 const initialState = {
 	loading: true,
@@ -32,6 +37,12 @@ export default (state = initialState, { type, payload }) => {
 				isAuthenticated: true,
 				loading: false,
 				name: payload.name
+			};
+		case REGISTER_USER:
+			console.log(payload);
+			return {
+				...state,
+				loading: false
 			};
 
 		default:
