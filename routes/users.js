@@ -31,7 +31,7 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-		console.log(req.body);
+
 		let { name, password } = req.body;
 		name = name.trim().toLowerCase();
 
@@ -50,7 +50,8 @@ router.post(
 					.json({ errors: [{ msg: "invalid credentials" }] });
 			}
 			const payload = {
-				user: user.id
+				user: user.id,
+				rate: user.rate
 			};
 			console.log(process.env.jwtSecret);
 			jwt.sign(
@@ -80,7 +81,10 @@ router.post(
 			.isEmpty(),
 		check("password", "Password is required")
 			.not()
-			.isEmpty())
+			.isEmpty()),
+		check("rate", "Rates is required")
+			.not()
+			.isEmpty()
 	],
 
 	async (req, res) => {

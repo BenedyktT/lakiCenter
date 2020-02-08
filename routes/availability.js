@@ -15,8 +15,9 @@ router.get("/:arrival/:departure/:hotel", auth, async (req, res) => {
 		res.status(404).json("include arrival and departure date");
 	}
 	try {
+		const rate = req.rate || "TRAVEL";
 		const response = await axios.get(
-			`https://api.roomercloud.net/services/bookingapi/availability1?hotel=${hotel}&channelCode=HOT&channelManagerCode=OWN&arrivalDate=${arrival}&departureDate=${departure}`
+			`https://api.roomercloud.net/services/bookingapi/availability1?hotel=${hotel}&channelCode=${rate}&channelManagerCode=OWN&arrivalDate=${arrival}&departureDate=${departure}`
 		);
 		const result = convert.xml2js(response.data, { compact: true, spaces: 4 });
 
@@ -80,6 +81,10 @@ router.get("/:arrival/:departure/:hotel", auth, async (req, res) => {
 		console.error(error);
 		res.json(error);
 	}
+});
+
+router.get("/test", auth, async (req, res) => {
+	res.json(req.rate);
 });
 
 module.exports = router;

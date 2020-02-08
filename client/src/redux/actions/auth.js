@@ -32,6 +32,11 @@ export const registerUser = data => async dispatch => {
 			type: REGISTER_USER,
 			payload: res.data
 		});
+		dispatch(
+			setAlert(
+				`User ${res.data.name} has been registered with ${res.data.rate} rate`
+			)
+		);
 	} catch (error) {
 		dispatch(setAlert("Register fail", "danger"));
 	}

@@ -11,6 +11,7 @@ module.exports = function(req, res, next) {
 		decoded = jwt.verify(token, process.env.jwtSecret);
 
 		req.user = decoded.user;
+		req.rate = decoded.rate;
 		next();
 	} catch (e) {
 		res.status(401).json({ msg: "token is not found" });

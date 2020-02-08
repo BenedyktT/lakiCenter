@@ -3,24 +3,26 @@ import React, { useState } from "react";
 import PasswordWithGenerator from "react-password-with-generator";
 import { registerUser } from "../redux/actions/auth";
 import { connect } from "react-redux";
+import { setAlert } from "../redux/actions/alerts";
 const Register = ({ registerUser }) => {
 	const [inputValue, setInputValue] = useState({
 		name: "",
-		password: ""
+		password: "",
+		rate: "TRAVEL"
 	});
 
 	const onSubmit = async e => {
 		const { name, password } = inputValue;
 		e.preventDefault();
 		if (!name || !password) {
-			console.log("dispatch error");
+			setAlert("Invalid credentials", "danger");
 			return;
 		}
 		const data = inputValue;
 		try {
 			registerUser(data);
 		} catch (error) {
-			console.error("INCORRECT CREDENTIAL");
+			setAlert("Register fail", "danger");
 		}
 	};
 	const onChange = e => {
@@ -53,6 +55,26 @@ const Register = ({ registerUser }) => {
 						value={inputValue.password}
 					/>
 				</div>
+				<div className="input-container">
+					<label htmlFor="name">Rate:</label>
+					<select
+						onChange={onChange}
+						className="padding-small  margin-small-x "
+						name="rate"
+						value={inputValue.rate}
+					>
+						<option name="rate" value="BDC">
+							Booking.com
+						</option>
+						<option name="rate" value="TRAVEL">
+							Travel agency
+						</option>
+						<option name="rate" value="HOT">
+							Discount direct
+						</option>
+					</select>
+				</div>
+
 				<div className="">
 					<h1>Random password hint</h1>
 					<br />

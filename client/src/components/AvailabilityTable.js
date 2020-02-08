@@ -3,54 +3,55 @@ import { loadAvailability } from "../redux/actions/availability";
 import { connect } from "react-redux";
 
 const AvailabilityTable = ({
-  loadAvailability,
-  availability,
-  startDate,
-  endDate,
-  isDateRangeSelected
+	loadAvailability,
+	availability,
+	startDate,
+	endDate,
+	isDateRangeSelected
 }) => {
-  useEffect(() => {
-    loadAvailability();
-  }, []);
-  useEffect(() => {
-    if (isDateRangeSelected) {
-      loadAvailability(startDate, endDate);
-    }
-  }, [isDateRangeSelected, startDate, endDate]);
-  return (
-    <div className="table-wrapper container">
-      <table className="blueTable">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Availability</th>
-            <th>Rate</th>
-          </tr>
-        </thead>
+	useEffect(() => {
+		loadAvailability();
+	}, []);
+	useEffect(() => {
+		if (isDateRangeSelected) {
+			loadAvailability(startDate, endDate);
+		}
+	}, [isDateRangeSelected, startDate, endDate]);
+	return (
+		<div className="table-wrapper container">
+			<table className="blueTable">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Availability</th>
+						<th>Rate</th>
+					</tr>
+				</thead>
 
-        <tbody>
-          <tr>
-            <td>Economy</td>
-            <td>{availability ? availability[1].dayAvail.available : "?"}</td>
-            <td>{availability ? availability[1].dayAvail.rate : "?"} ISK</td>
-          </tr>
-          <tr>
-            <td>Standard</td>
-            <td>{availability ? availability[2].dayAvail.available : "?"}</td>
-            <td>{availability ? availability[2].dayAvail.rate : "?"} ISK</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
+				<tbody>
+					{availability &&
+						availability
+							.filter(e => !e.desc.includes("1P") && !e.desc.includes("-5%"))
+							.sort((a, b) => (a.desc > b.desc ? 1 : -1))
+							.map(roomType => (
+								<tr key={roomType.desc}>
+									<td>{roomType.desc}</td>
+									<td>{roomType.dayAvail.available}</td>
+									<td>{roomType.dayAvail.rate} ISK</td>
+								</tr>
+							))}
+				</tbody>
+			</table>
+		</div>
+	);
 };
 
 export default connect(
-  state => ({
-    availability: state.availability.availability,
-    startDate: state.availability.startDate,
-    endDate: state.availability.endDate,
-    isDateRangeSelected: state.availability.isDateRangeSelected
-  }),
-  { loadAvailability }
+	state => ({
+		availability: state.availability.availability,
+		startDate: state.availability.startDate,
+		endDate: state.availability.endDate,
+		isDateRangeSelected: state.availability.isDateRangeSelected
+	}),
+	{ loadAvailability }
 )(AvailabilityTable);
