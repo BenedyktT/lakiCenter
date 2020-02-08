@@ -1,8 +1,10 @@
 import { LOGOUT_USER, LOGIN_USER, LOAD_USER, REGISTER_USER } from "./types";
 import axios from "axios";
 import { setAlert } from "./alerts";
+import setAuthToken from "../../components/helper/setAuthToken";
 export const logoutUser = () => dispatch => {
 	dispatch({ type: LOGOUT_USER });
+	dispatch(setAlert("User logged out", "success"));
 };
 
 export const loginUser = data => async dispatch => {
@@ -29,8 +31,7 @@ export const registerUser = data => async dispatch => {
 		});
 
 		dispatch({
-			type: REGISTER_USER,
-			payload: res.data
+			type: REGISTER_USER
 		});
 		dispatch(
 			setAlert(
@@ -43,6 +44,10 @@ export const registerUser = data => async dispatch => {
 };
 
 export const loadUser = () => async dispatch => {
+	if (localStorage.token) {
+		setAuthToken(localStorage.token);
+	}
+
 	try {
 		const res = await axios.get("/user");
 		dispatch({

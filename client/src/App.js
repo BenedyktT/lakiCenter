@@ -24,7 +24,7 @@ function App() {
 		if (token) {
 			store.dispatch(loadUser());
 		}
-	}, []);
+	}, [token]);
 	return (
 		<Provider store={store}>
 			<div className="App">

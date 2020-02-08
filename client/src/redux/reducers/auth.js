@@ -39,7 +39,6 @@ export default (state = initialState, { type, payload }) => {
 				name: payload.name
 			};
 		case REGISTER_USER:
-			console.log(payload);
 			return {
 				...state,
 				loading: false
