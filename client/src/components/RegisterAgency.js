@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 
-import PasswordWithGenerator from "react-password-with-generator";
 import { registerUser } from "../redux/actions/auth";
 import { connect } from "react-redux";
 import { setAlert } from "../redux/actions/alerts";
-const Register = ({ registerUser, setAlert }) => {
+const Register = ({ registerUser, setAlert, isRegistered, history }) => {
   const [inputValue, setInputValue] = useState({
     name: "",
     password: "",
@@ -50,6 +49,9 @@ const Register = ({ registerUser, setAlert }) => {
   const onChange = e => {
     setInputValue({ ...inputValue, [e.target.name]: e.target.value });
   };
+  if (isRegistered) {
+    history.push("/login");
+  }
 
   return (
     <div className="container border nooverflow">
@@ -111,4 +113,9 @@ const Register = ({ registerUser, setAlert }) => {
   );
 };
 
-export default connect(null, { registerUser, setAlert })(Register);
+export default connect(
+  state => ({
+    isRegistered: state.auth.isRegistered
+  }),
+  { registerUser, setAlert }
+)(Register);

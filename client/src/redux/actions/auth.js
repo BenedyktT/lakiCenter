@@ -1,4 +1,11 @@
-import { LOGOUT_USER, LOGIN_USER, LOAD_USER, REGISTER_USER } from "./types";
+import {
+  LOGOUT_USER,
+  LOGIN_USER,
+  LOAD_USER,
+  REGISTER_USER,
+  REGISTER_SUCCESS,
+  REGISTER_RESET
+} from "./types";
 import axios from "axios";
 import { setAlert } from "./alerts";
 import setAuthToken from "../../components/helper/setAuthToken";
@@ -32,6 +39,12 @@ export const registerUser = data => async dispatch => {
     dispatch({
       type: REGISTER_USER
     });
+    dispatch({
+      type: REGISTER_SUCCESS
+    });
+    setTimeout(() => {
+      dispatch({ type: REGISTER_RESET });
+    }, 1500);
     dispatch(
       setAlert(
         `User ${res.data.name} has been registered with ${res.data.rate} rate`
