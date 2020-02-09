@@ -19,32 +19,32 @@ import RegisterAgency from "./components/RegisterAgency";
 
 const token = localStorage.getItem("token");
 if (token) {
-  setAuthToken(token);
+	setAuthToken(token);
 }
 function App() {
-  useEffect(() => {
-    if (token) {
-      store.dispatch(loadUser());
-    }
-  }, [token]);
+	useEffect(() => {
+		if (token) {
+			store.dispatch(loadUser());
+		}
+	}, [token]);
 
-  return (
-    <Provider store={store}>
-      <div className="App">
-        <Router>
-          <Header />
-          <Alert />
-          <Switch>
-            <AdminRoute exact path="/register" component={Register} />
-            <AdminRoute exact path="/admin" component={AdminDashboard} />
-            <Privateroute exact path="/" component={Dashboard} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register/agency" component={RegisterAgency} />
-          </Switch>
-        </Router>
-      </div>
-    </Provider>
-  );
+	return (
+		<Provider store={store}>
+			<div className="App">
+				<Router>
+					<Header />
+					<Alert />
+					<Switch>
+						<AdminRoute exact path="/register" component={Register} />
+						<AdminRoute exact path="/admin" component={AdminDashboard} />
+						<Privateroute exact path="/" component={Dashboard} />
+						<Route exact path="/login" component={Login} />
+						<Route exact path="/register/agency" component={RegisterAgency} />
+					</Switch>
+				</Router>
+			</div>
+		</Provider>
+	);
 }
 
 export default App;

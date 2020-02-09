@@ -1,20 +1,21 @@
 import React, { useEffect } from "react";
-import { loadAvailability } from "../redux/actions/availability";
+import { loadToggleableAvailability } from "../redux/actions/availability";
 import { connect } from "react-redux";
 
 const AvailabilityTable = ({
 	availability,
+	rate,
 	isDateRangeSelected,
 	startDate,
 	endDate,
-	loadAvailability
+	loadToggleableAvailability
 }) => {
 	useEffect(() => {
-		loadAvailability();
+		loadToggleableAvailability();
 	}, []);
 	useEffect(() => {
 		if (isDateRangeSelected) {
-			loadAvailability(startDate, endDate);
+			loadToggleableAvailability(startDate, endDate, rate);
 		}
 	}, [isDateRangeSelected, startDate, endDate]);
 	return (
@@ -53,9 +54,10 @@ const AvailabilityTable = ({
 export default connect(
 	state => ({
 		availability: state.availability.availability,
+		rate: state.availability.rateType,
 		startDate: state.availability.startDate,
 		endDate: state.availability.endDate,
 		isDateRangeSelected: state.availability.isDateRangeSelected
 	}),
-	{ loadAvailability }
+	{ loadToggleableAvailability }
 )(AvailabilityTable);
