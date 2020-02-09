@@ -9,19 +9,20 @@ const wakeUpDyno = require("./wakeUpDyno");
 
 app.use("/availability", require("./routes/availability"));
 app.use("/user", require("./routes/users"));
-app.get("/.well-known/acme-challenge/:content", function(req, res) {
-  res.send(`${process.env.SSL}`);
-});
+
 if (process.env.NODE_ENV === "production") {
   // Set static folder
 
-  app.use(express.static("client/build"), { dotfiles: "allow" });
+  app.use(express.static("client/build"));
   app.get("/", function(req, res) {
     res.sendFile(path.join(__dirname, "build", "index.html"));
   });
 }
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+app.get("/.well-known/acme-challenge/:content", function(req, res) {
+  res.send(`${process.env.SSL}`);
 });
 
 const PORT = process.env.PORT || 5000;
