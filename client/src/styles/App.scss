@@ -2,93 +2,99 @@
 @import "./global";
 @import "./buttons.scss";
 
-
-$bg-grey: #C4C4C4;
+$bg-grey: #c4c4c4;
 //container
- .container{
-    margin-right: auto; /* 1 */
-    margin-left:  auto; /* 1 */
-    max-width: 960px; /* 2 */
-    padding-right: 10px; /* 3 */
-    padding-left:  10px; /* 3 */
- }
-.App{
-  
-    text-align: center;
-    @include respond-to(handhelds){
-      text-align: inherit;
-    }
-    padding:1rem;
-    min-width:240px;
-    height:100vh
-    
+.container {
+  margin-right: auto; /* 1 */
+  margin-left: auto; /* 1 */
+  max-width: 960px; /* 2 */
+  padding-right: 10px; /* 3 */
+  padding-left: 10px; /* 3 */
+}
+.App {
+  text-align: center;
+  @include respond-to(handhelds) {
+    text-align: inherit;
+  }
+  padding: 1rem;
+  min-width: 240px;
+  height: 100vh;
 }
 
-
-.table-wrapper{
-    width: 85%;
-    margin: 2rem auto;
-    @include respond-to(handhelds){
-        width:100%
-    }
+.table-wrapper {
+  width: 85%;
+  margin: 2rem auto;
+  @include respond-to(handhelds) {
+    width: 100%;
+  }
 }
 
 table.blueTable {
-    
-    background-color: #F7F7F7;
-    width: 100%;
-    text-align: center;
-    border-collapse: collapse;
-  }
-  table.blueTable td, table.blueTable th {
-    border: 1px solid #AAAAAA;
-    padding: 9px 3px;
-  }
-  table.blueTable tbody td {
-    font-size: 13px;
-  }
-  table.blueTable tr:nth-child(even) {
-    background: #D0E4F5;
-  }
-  table.blueTable thead {
-  
-    background: -moz-linear-gradient(top, $blue-a 0%, $blue-b 66%, $blue-a  100%);
-    background: -webkit-linear-gradient(top, $blue-b 0%, $blue-b 66%, $blue-b 100%);
-    background: linear-gradient(to bottom, $pink-a 0%, $pink-a 66%, $pink-a 100%);
-  
-  }
-  table.blueTable thead th {
-    font-size: 15px;
-    font-weight: bold;
-    color: #FFFFFF;
-    border-left: 2px solid #D0E4F5;
-  }
-  table.blueTable thead th:first-child {
-    border-left: none;
-  }
-  
+  background-color: #f7f7f7;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.blueTable td,
+table.blueTable th {
+  border: 1px solid #aaaaaa;
+  padding: 9px 3px;
+}
+table.blueTable tbody td {
+  font-size: 13px;
+}
+table.blueTable tr:nth-child(even) {
+  background: #d0e4f5;
+}
+table.blueTable thead {
+  background: -moz-linear-gradient(top, $blue-a 0%, $blue-b 66%, $blue-a 100%);
+  background: -webkit-linear-gradient(
+    top,
+    $blue-b 0%,
+    $blue-b 66%,
+    $blue-b 100%
+  );
+  background: linear-gradient(to bottom, $pink-a 0%, $pink-a 66%, $pink-a 100%);
+}
+table.blueTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffffff;
+  border-left: 2px solid #d0e4f5;
+}
+table.blueTable thead th:first-child {
+  border-left: none;
+}
 
+.App-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
 
- .App-header{
-   display:flex;
-   justify-content: space-between;
-   align-items: flex-start;
-   margin-bottom:2rem
- }
-
- .alert-box{
-    width:85%;
-    margin:1rem auto;
-    top:15%;
-    color:white;
-    box-shadow: 2px 5px 10px 0.2px rgba($bg-grey,1);
-    text-align: center;;
-    padding:1rem;
-   
- }
- .danger{
-   background:$gradient-danger
- }
- .success {
-   background:$gradient-success
- }
+.alert-box {
+  width: 85%;
+  margin: 1rem auto;
+  top: 15%;
+  color: white;
+  box-shadow: 2px 5px 10px 0.2px rgba($bg-grey, 1);
+  text-align: center;
+  padding: 1rem;
+}
+.danger {
+  background: $gradient-danger;
+}
+.success {
+  background: $gradient-success;
+}
+.register-container {
+  height: 100%;
+}
+.btn-register {
+  background: $gradient-pink;
+  color: white;
+  font-weight: bold;
+  padding: 1rem;
+  border-radius: 5px;
+}
