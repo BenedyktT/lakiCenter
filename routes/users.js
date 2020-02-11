@@ -180,7 +180,7 @@ router.post(
 				return jwt.sign(payload, secret, { expiresIn: 3600 });
 			};
 			const getPasswordResetURL = (user, token) =>
-				`http://lakicenter.com/#/password/reset/${user._id}/${token}`;
+				`http://www.lakicenter.com/#/password/reset/${user._id}/${token}`;
 
 			try {
 				const token = makeToken(secret, payload);
