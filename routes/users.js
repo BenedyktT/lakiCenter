@@ -10,10 +10,12 @@ const moment = require("moment");
 
 const resetPasswordTemplate = require("../middleware/email");
 transporter = nodemailer.createTransport({
-	service: "gmail",
+	host: "email.stefna.is",
+	port: 465,
+	secure: true,
 	auth: {
-		user: process.env.EMAIL_LOGIN,
-		pass: process.env.EMAIL_PASSWORD
+		user: `${process.env.EMAIL_LOGIN}`,
+		pass: `${process.env.EMAIL_PASSWORD}`
 	}
 });
 
@@ -161,13 +163,14 @@ router.post(
 			return res.status(400).json({ errors: errors.array() });
 		}
 		const { email } = req.body;
-
+		console.log(email);
 		try {
 			let user = await User.findOne({ email });
 			if (!user) {
 				res
 					.status(404)
 					.json("We cannot find an account for this email address");
+				return;
 			}
 			const payload = {
 				id: user.id
@@ -177,7 +180,7 @@ router.post(
 				return jwt.sign(payload, secret, { expiresIn: 3600 });
 			};
 			const getPasswordResetURL = (user, token) =>
-				`http://localhost:5000/password/reset/${user._id}/${token}`;
+				`http://lakicenter.com/#/password/reset/${user._id}/${token}`;
 
 			try {
 				const token = makeToken(secret, payload);
@@ -190,7 +193,8 @@ router.post(
 							res.status(500).json(err);
 							return;
 						}
-						console.log(`** Email sent **`, info);
+
+						res.json(info);
 					});
 				};
 				sendEmail();
@@ -202,6 +206,34 @@ router.post(
 		}
 	}
 );
+
+//set new password
+
+router.post("/password/reset/:id/:token", async (req, res, next) => {
+	const { id, token } = req.params;
+	let { password } = req.body;
+
+	if (!token) {
+		return res.status(401).json({ msg: "No token auth denied" });
+	}
+
+	try {
+		let user = await User.findById(id);
+		const secret = user.password + "-" + moment(user.date).unix();
+		const payload = jwt.verify(token, secret).id;
+		if (user.id === payload) {
+			user.password = password;
+			const salt = await bcrypt.genSalt(10);
+			user.password = await bcrypt.hash(password, salt);
+			await user.save();
+			return res.json(user);
+		} else {
+			return res.status(401).json("No can do");
+		}
+	} catch (error) {
+		return res.status(401).json({ msg: "token is not found" });
+	}
+});
 
 module.exports = router;
 

@@ -1,12 +1,9 @@
-module.exports = getPasswordResetURL = (user, token) =>
-	`http://localhost:5000/password/reset/${user._id}/${token}`;
-
 module.exports = resetPasswordTemplate = (user, url) => {
 	const from = process.env.EMAIL_LOGIN;
 	const to = user.email;
-	const subject = "Hotel Laki availability app password reset";
+	const subject = "Hotel Laki Availability Password reset";
 	const html = `
-  <p>Hey ${user.email},</p>
+  <p>Hey ${user.name},</p>
   
  <p>You can use the following link to reset your password:</p>
   <a href=${url}>${url}</a>

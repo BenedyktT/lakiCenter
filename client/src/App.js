@@ -16,6 +16,8 @@ import { loadUser } from "./redux/actions/auth";
 import Alert from "./components/Alert";
 import AdminDashboard from "./components/AdminDashboard";
 import RegisterAgency from "./components/RegisterAgency";
+import ForgotPassword from "./components/ForgotPassword";
+import SetNewPassword from "./components/SetNewPassword";
 
 const token = localStorage.getItem("token");
 if (token) {
@@ -40,6 +42,12 @@ function App() {
 						<Privateroute exact path="/" component={Dashboard} />
 						<Route exact path="/login" component={Login} />
 						<Route exact path="/register/agency" component={RegisterAgency} />
+						<Route exact path="/forgotpassword" component={ForgotPassword} />
+						<Route
+							exact
+							path="/password/reset/:id/:token"
+							component={SetNewPassword}
+						/>
 					</Switch>
 				</Router>
 			</div>

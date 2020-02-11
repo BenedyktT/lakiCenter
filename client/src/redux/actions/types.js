@@ -13,3 +13,5 @@ export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
 export const SET_RATE_TYPE = "SET_RATE_TYPE ";
 export const REGISTER_RESET = "REGISTER_RESET";
+export const EMAIL_SENT = "EMAIL_SENT";
+export const PASSWORD_CHANGE_SUCCESS = "PASSWORD_CHANGE_SUCCESS";
