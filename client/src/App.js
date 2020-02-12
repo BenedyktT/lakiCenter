@@ -18,6 +18,8 @@ import AdminDashboard from "./components/AdminDashboard";
 import RegisterAgency from "./components/RegisterAgency";
 import ForgotPassword from "./components/ForgotPassword";
 import SetNewPassword from "./components/SetNewPassword";
+import AdminOccupancyOverview from "./components/AdminOccupancyOverview";
+import { toggleHamburger } from "./redux/actions/layout";
 
 const token = localStorage.getItem("token");
 if (token) {
@@ -35,20 +37,28 @@ function App() {
 			<div className="App">
 				<Router>
 					<Header />
+
 					<Alert />
-					<Switch>
-						<AdminRoute exact path="/register" component={Register} />
-						<AdminRoute exact path="/admin" component={AdminDashboard} />
-						<Privateroute exact path="/" component={Dashboard} />
-						<Route exact path="/login" component={Login} />
-						<Route exact path="/register/agency" component={RegisterAgency} />
-						<Route exact path="/forgotpassword" component={ForgotPassword} />
-						<Route
-							exact
-							path="/password/reset/:id/:token"
-							component={SetNewPassword}
-						/>
-					</Switch>
+					<div className="container">
+						<Switch>
+							<AdminRoute
+								exact
+								path="/admin/overview"
+								component={AdminOccupancyOverview}
+							/>
+							<AdminRoute exact path="/register" component={Register} />
+							<AdminRoute exact path="/admin" component={AdminDashboard} />
+							<Privateroute exact path="/" component={Dashboard} />
+							<Route exact path="/login" component={Login} />
+							<Route exact path="/register/agency" component={RegisterAgency} />
+							<Route exact path="/forgotpassword" component={ForgotPassword} />
+							<Route
+								exact
+								path="/password/reset/:id/:token"
+								component={SetNewPassword}
+							/>
+						</Switch>
+					</div>
 				</Router>
 			</div>
 		</Provider>

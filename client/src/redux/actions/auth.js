@@ -11,9 +11,11 @@ import {
 import axios from "axios";
 import { setAlert } from "./alerts";
 import setAuthToken from "../../components/helper/setAuthToken";
+import { toggleHamburger } from "./layout";
 export const logoutUser = () => dispatch => {
 	dispatch({ type: LOGOUT_USER });
 	dispatch(setAlert("User logged out", "success"));
+	dispatch(toggleHamburger());
 };
 
 export const loginUser = data => async dispatch => {
