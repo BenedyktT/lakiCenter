@@ -19,7 +19,6 @@ import RegisterAgency from "./components/RegisterAgency";
 import ForgotPassword from "./components/ForgotPassword";
 import SetNewPassword from "./components/SetNewPassword";
 import AdminOccupancyOverview from "./components/AdminOccupancyOverview";
-import { toggleHamburger } from "./redux/actions/layout";
 
 const token = localStorage.getItem("token");
 if (token) {
