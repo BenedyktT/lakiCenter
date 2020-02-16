@@ -3,10 +3,16 @@ const router = express.Router();
 const axios = require("axios");
 const auth = require("../middleware/auth");
 const apiAuth = require("../middleware/apiAuth");
+const sample = require("./sample.json");
 
 router.get("/", apiAuth, async (req, res) => {
+<<<<<<< HEAD
   try {
     /* 	 const res = await axios.get(
+=======
+	try {
+		/* 	 const res = await axios.get(
+>>>>>>> sample
 			"services/bookingapi/reservations?stayFromDate=2020-02-13&stayToDate=2020-02-14&includeOutOfOrder=false&includeInvoices=false&modifiedSince=2020-02-13T15:55:32"
         );  */
 
@@ -19,6 +25,7 @@ router.get("/", apiAuth, async (req, res) => {
 			}
 		); */
 
+<<<<<<< HEAD
     const response = await axios.get(
       "services/bookingapi/reservations?stayFromDate=2020-02-15&stayToDate=2020-02-15&includeOutOfOrder=false&includeInvoices=false&modifiedSince=2020-02-15T21:37:32",
       {
@@ -46,6 +53,15 @@ router.get("/", apiAuth, async (req, res) => {
 
       return acc;
     }, []);
+=======
+		const xml = sample;
+		const response = await axios.post("/roomer/openAPI/REST/bookings", xml, {
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json"
+			}
+		});
+>>>>>>> sample
 
     return res.json(data);
   } catch (error) {

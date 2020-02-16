@@ -1,0 +1,61 @@
+ {
+    "ns:NewBookingRequest": {
+      "-xmlns:ns": "http://www.promoir.nl/roomer/booking/2014/02",
+      "-xmlns:ns1": "http://roomer.promoir.nl/datamodel/booking/modelobjects/2014/01/",
+      "-xmlns:ns2": "http://roomer.promoir.nl/datamodel/canonical/datastructures/2014/01/",
+      "-xmlns:ns3": "http://roomer.promoir.nl/datamodel/canonical/basetypes/2014/01/",
+      "-xmlns:rmrst": "http://roomer.promoir.nl/datamodel/canonical/simpletypes/2014/01/",
+      "-xmlns:ns4": "http://roomer.promoir.nl/datamodel/payment/basetypes/2014/01/",
+      "-channelCode": "HOT",
+      "-channelManagerCode": "HOT",
+      "ns1:NewBooking": {
+        "ns2:guest": {
+          "-id": "000000000",
+          "ns2:firstName": "string",
+          "ns2:lastName": "string",
+          "ns2:gender": "FEMALE",
+          "ns2:title": "string",
+          "ns2:dateOfBirth": "2007-10-26",
+          "ns2:guestAgeCategory": "ADULT",
+          "ns2:address": {
+            "ns3:houseNumber": "string",
+            "ns3:extension": "string",
+            "ns3:postOfficeBoxNumber": "string",
+            "ns3:street": "string",
+            "ns3:postalCode": "string",
+            "ns3:postalDistrict": "string",
+            "ns3:municipality": "string",
+            "ns3:county": "string",
+            "ns3:state": "string",
+            "ns3:country": "string"
+          },
+          "ns2:contactDetails": {
+            "ns3:telephone": "string",
+            "ns3:mobile": "string",
+            "ns3:email": "string",
+            "ns3:fax": "string"
+          }
+        },
+        "ns2:BaseRoomRequest": {
+          "-rmrst:roomType": "DBL-10%",
+          "-arrivalDateTime": "2020-02-15",
+          "-departureDateTime": "2020-02-16",
+          "ns2:guest": "string",
+          "ns2:ratePlan": {
+            "-ratePlan": "DBL-10%",
+            "-rmrst:roomType": "DBL-10%",
+            "ns3:rate": {
+              "-from": "2020-02-15",
+              "-to": "2020-02-16",
+              "-currency": "ISK",
+              "-amount": "1000.00",
+              "-multiplier": "1"
+            }
+          },
+          "ns2:specialServiceRequests": { "ns3:specialServiceRequest": "ParkingAccess" },
+          "ns2:remarks": { "ns3:remark": "string" }
+        },
+        "ns2:remarks": { "ns3:remark": "string" }
+      }
+    }
+  }
