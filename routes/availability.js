@@ -289,17 +289,39 @@ router.get("/calendar", async (req, res) => {
   });
   //Google Calendar API
   let calendar = google.calendar("v3");
-  calendar.events.list(
+  var event = {
+    summary: `${rooms} Rooms sold`,
+    location: "Hotel Laki",
+    description: `Hi! Today we have ${rooms} sold`,
+    start: {
+      date: `${date}`,
+      timeZone: "America/Los_Angeles"
+    },
+    end: {
+      date: `${date}`,
+      timeZone: "America/Los_Angeles"
+    },
+    reminders: {
+      useDefault: false
+    }
+  };
+
+  calendar.events.insert(
     {
       auth: jwtClient,
-      calendarId: "info.hotellaki@gmail.com"
+      calendarId: "info.hotellaki@gmail.com",
+      resource: event
     },
-    function(err, response) {
+    function(err, event) {
       if (err) {
-        console.log("The API returned an error: " + err);
+        console.log(
+          "There was an error contacting the Calendar service: " + err
+        );
         return;
       }
-      return res.json(response.data);
+
+      console.log("Event created: %s", event.htmlLink);
+      res.json(event);
     }
   );
 });
