@@ -7,7 +7,7 @@ import { loadAvailability } from "../redux/actions/availability";
 const Dashboard = ({ history, user }) => {
 	useEffect(() => {
 		if (user === "adminlaki") {
-			history.push("/admin");
+			history.push(localStorage.getItem("route") || "/admin");
 			return;
 		}
 	}, [user]);

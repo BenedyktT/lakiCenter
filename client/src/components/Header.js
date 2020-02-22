@@ -49,7 +49,7 @@ const Header = ({
 				></div>
 			)}
 			<header className="App-header">
-				<Link to="/">
+				<Link to="/" onClick={() => localStorage.removeItem("route")}>
 					<img src={logo} className="App-logo" alt="logo" />
 				</Link>{" "}
 				{}
@@ -61,19 +61,31 @@ const Header = ({
 				>
 					{name === "adminlaki" && (
 						<Fragment>
-							<Link className="btn btn-nav nav-link" to="/">
+							<Link
+								className="btn btn-nav nav-link"
+								to="/"
+								onClick={() => localStorage.removeItem("route")}
+							>
 								<i>
 									<Home className="nav-icon" />
 								</i>
 								Home
 							</Link>
-							<Link className="btn btn-nav nav-link" to="/register">
+							<Link
+								className="btn btn-nav nav-link"
+								to="/register"
+								onClick={() => localStorage.removeItem("route")}
+							>
 								<i>
 									<Plus className="nav-icon" />
 								</i>
 								Register
 							</Link>
-							<Link className="btn btn-nav nav-link" to="/admin/overview">
+							<Link
+								className="btn btn-nav nav-link"
+								to="/admin/overview"
+								onClick={() => localStorage.setItem("route", "/admin/overview")}
+							>
 								<i>
 									<Occupancy className="nav-icon" />
 								</i>
@@ -86,7 +98,10 @@ const Header = ({
 							<Link
 								className="btn btn-nav"
 								to="/login"
-								onClick={() => logoutUser()}
+								onClick={() => {
+									logoutUser();
+									localStorage.removeItem("route");
+								}}
 							>
 								<i>
 									<Logout className="nav-icon" />

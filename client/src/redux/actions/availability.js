@@ -1,4 +1,9 @@
-import { SET_CALENDAR, LOAD_AVAILABILITY, SET_RATE_TYPE } from "./types";
+import {
+	SET_CALENDAR,
+	LOAD_AVAILABILITY,
+	SET_RATE_TYPE,
+	GET_MONTHLY_OVERVIEW
+} from "./types";
 
 import moment from "moment";
 import axios from "axios";
@@ -55,4 +60,24 @@ export const setRateType = rate => dispatch => {
 		type: SET_RATE_TYPE,
 		payload: rate
 	});
+};
+
+export const getMonthlyOverview = (
+	startDate,
+	endDate,
+	hotel = "LAKI",
+	agent = "BDC"
+) => async dispatch => {
+	try {
+		const res = await axios.get(
+			`/availability/monthly/${startDate}/${endDate}/${hotel}/${agent}`
+		);
+
+		dispatch({
+			type: GET_MONTHLY_OVERVIEW,
+			payload: res.data
+		});
+	} catch (error) {
+		console.error(error);
+	}
 };
