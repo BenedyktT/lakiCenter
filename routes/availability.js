@@ -6,91 +6,99 @@ const auth = require("../middleware/auth");
 const convert = require("xml-js");
 const moment = require("moment");
 
-router.get("/monthly/:arrival/:departure/:hotel/:rate/", async (req, res) => {
-	const { arrival, departure, hotel, rate } = req.params;
+router.get(
+	"/monthly/:arrival/:departure/:hotel/:rate/",
+	auth,
+	async (req, res) => {
+		const { arrival, departure, hotel, rate } = req.params;
 
-	try {
-		const response = await axios.get(
-			`https://api.roomercloud.net/services/bookingapi/availability1?hotel=${hotel}&channelCode=${rate}&channelManagerCode=OWN&arrivalDate=${arrival}&departureDate=${departure}`
-		);
-		const result = convert.xml2js(response.data, {
-			compact: true,
-			spaces: 4
-		});
-		const month = result.availability.inventory.inventoryItem
-			.map(e => {
-				const availabilityToOccupancy = (baseCode, availability) => {
-					let occupancy = 0;
-					if (baseCode.includes("DSUP")) occupancy = 20 - availability;
-					if (baseCode.includes("QUE")) occupancy = 9 - availability;
-					if (baseCode.includes("TWDB")) occupancy = 27 - availability;
-					if (baseCode.includes("SUI")) occupancy = 1 - availability;
-					if (baseCode.includes("DBL")) occupancy = 39 - availability;
-					if (baseCode.includes("ECO")) occupancy = 24 - availability;
-					return occupancy;
-				};
-				const baseCode = e._attributes.availabilityBaseCode;
-				return {
-					baseCode,
-					description: e._attributes.description,
-					inventoryCode: e._attributes.inventoryCode,
-					availability: e.availabilityAndRates.day.map(x => ({
-						date: x._attributes.date,
-						availability: x._attributes.availability,
-						rate: x._attributes.rate,
-						occupancy: availabilityToOccupancy(
-							baseCode,
-							parseInt(x._attributes.availability)
-						)
-					}))
-				};
-			})
-			.filter(e =>
-				hotel === "KLAUS" ? e.inventoryCode.includes("NRBI") : true
+		try {
+			const response = await axios.get(
+				`https://api.roomercloud.net/services/bookingapi/availability1?hotel=${hotel}&channelCode=${rate}&channelManagerCode=OWN&arrivalDate=${arrival}&departureDate=${departure}`
 			);
-		let total = month
-			.map(category =>
-				category.availability.map(x => ({ ...x, baseCode: category.baseCode }))
-			)
-			.flat(1)
-			.reduce((acc, curr) => {
-				const x = acc.find(
-					e => e.baseCode === curr.baseCode && e.date === curr.date
+			const result = convert.xml2js(response.data, {
+				compact: true,
+				spaces: 4
+			});
+			const month = result.availability.inventory.inventoryItem
+				.map(e => {
+					const availabilityToOccupancy = (baseCode, availability) => {
+						let occupancy = 0;
+						if (baseCode.includes("DSUP")) occupancy = 20 - availability;
+						if (baseCode.includes("QUE")) occupancy = 9 - availability;
+						if (baseCode.includes("TWDB")) occupancy = 27 - availability;
+						if (baseCode.includes("SUI")) occupancy = 1 - availability;
+						if (baseCode.includes("DBL")) occupancy = 39 - availability;
+						if (baseCode.includes("ECO")) occupancy = 24 - availability;
+						return occupancy;
+					};
+					const baseCode = e._attributes.availabilityBaseCode;
+					return {
+						baseCode,
+						description: e._attributes.description,
+						inventoryCode: e._attributes.inventoryCode,
+						availability: e.availabilityAndRates.day.map(x => ({
+							date: x._attributes.date,
+							availability: x._attributes.availability,
+							rate: x._attributes.rate,
+							occupancy: availabilityToOccupancy(
+								baseCode,
+								parseInt(x._attributes.availability)
+							)
+						}))
+					};
+				})
+				.filter(e =>
+					hotel === "KLAUS" ? e.inventoryCode.includes("NRBI") : true
 				);
-				if (!x) {
-					return [...acc, curr];
-				}
-				return acc;
-			}, [])
-			.reduce((acc, curr, i, arr) => {
-				const x = arr.filter(e => e.date === curr.date);
-				const y = acc.find(y => y.date === curr.date);
-				if (!y) {
-					return [
-						...acc,
-						x.reduce(
-							(a, c) => {
-								return {
-									...a,
-									date: c.date,
-									rate: (a.rate =
-										parseInt(a.rate) < parseInt(c.rate) && parseInt(a.rate) > 0
-											? a.rate
-											: c.rate),
-									occupancy: c.occupancy + a.occupancy
-								};
-							},
-							{ rate: 0, occupancy: 0 }
-						)
-					];
-				} else return acc;
-			}, []);
+			let total = month
+				.map(category =>
+					category.availability.map(x => ({
+						...x,
+						baseCode: category.baseCode
+					}))
+				)
+				.flat(1)
+				.reduce((acc, curr) => {
+					const x = acc.find(
+						e => e.baseCode === curr.baseCode && e.date === curr.date
+					);
+					if (!x) {
+						return [...acc, curr];
+					}
+					return acc;
+				}, [])
+				.reduce((acc, curr, i, arr) => {
+					const x = arr.filter(e => e.date === curr.date);
+					const y = acc.find(y => y.date === curr.date);
+					if (!y) {
+						return [
+							...acc,
+							x.reduce(
+								(a, c) => {
+									return {
+										...a,
+										date: c.date,
+										rate: (a.rate =
+											parseInt(a.rate) < parseInt(c.rate) &&
+											parseInt(a.rate) > 0
+												? a.rate
+												: c.rate),
+										occupancy: c.occupancy + a.occupancy
+									};
+								},
+								{ rate: 0, occupancy: 0 }
+							)
+						];
+					} else return acc;
+				}, []);
 
-		return res.json(total);
-	} catch (error) {
-		return res.status(500).json(error);
+			return res.json(total);
+		} catch (error) {
+			return res.status(500).json(error);
+		}
 	}
-});
+);
 
 router.get("/:arrival/:departure/:hotel/", auth, async (req, res) => {
 	const arrival = req.params.arrival;
