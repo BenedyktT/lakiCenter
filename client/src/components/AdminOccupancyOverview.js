@@ -24,6 +24,7 @@ const AdminOccupancyOverview = ({ getMonthlyOverview, monthReport }) => {
 		<div className="">
 			<div className="">
 				<DateRangePicker
+					numberOfMonths={1}
 					startDate={date.startDate} // momentPropTypes.momentObj or null,
 					startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
 					endDate={date.endDate} // momentPropTypes.momentObj or null,
