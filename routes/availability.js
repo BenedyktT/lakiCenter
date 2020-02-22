@@ -10,7 +10,7 @@ const privatekey = require("../lakiconnect.js");
 
 router.get(
   "/monthly/:arrival/:departure/:hotel/:rate/",
-
+  auth,
   async (req, res) => {
     const { arrival, departure, hotel, rate } = req.params;
 
