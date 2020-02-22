@@ -5,6 +5,8 @@ const axios = require("axios");
 const auth = require("../middleware/auth");
 const convert = require("xml-js");
 const moment = require("moment");
+const { google } = require("googleapis");
+const privatekey = require("../lakiconnect.js");
 
 router.get(
 	"/monthly/:arrival/:departure/:hotel/:rate/",
@@ -268,4 +270,38 @@ router.get(
 		}
 	}
 );
+
+router.get("/calendar", async (req, res) => {
+	let jwtClient = new google.auth.JWT(
+		privatekey.client_email,
+		null,
+		privatekey.private_key,
+		["https://www.googleapis.com/auth/calendar"]
+	);
+	//authenticate request
+	jwtClient.authorize(function(err, tokens) {
+		if (err) {
+			console.log(err);
+			return;
+		} else {
+			console.log("Successfully connected!");
+		}
+	});
+	//Google Calendar API
+	let calendar = google.calendar("v3");
+	calendar.events.list(
+		{
+			auth: jwtClient,
+			calendarId: "info.hotellaki@gmail.com"
+		},
+		function(err, response) {
+			if (err) {
+				console.log("The API returned an error: " + err);
+				return;
+			}
+			return res.json(response.data);
+		}
+	);
+});
+
 module.exports = router;
