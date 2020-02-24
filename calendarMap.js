@@ -12,7 +12,7 @@ const updateCalendar = async () => {
 		});
 		const today = moment().format("YYYY-MM-DD");
 		const monthFromToday = moment()
-			.add(5, "day")
+			.add(10, "day")
 			.format("YYYY-MM-DD");
 		const res = await axios.get(
 			`http://localhost:5000/availability/monthly/${today}/${monthFromToday}/LAKI/BDC`,
@@ -41,16 +41,16 @@ const updateCalendar = async () => {
 		});
 
 		let calendar = google.calendar({ version: "v3", auth: jwtClient });
-		const addEvent = async event => {
+		const addEvent = async ({ occupancy, date }) => {
 			const data = {
-				summary: `${event.occupancy} Rooms Sold`,
+				summary: `${occupancy} Rooms Sold`,
 				location: "Efri-Vik",
-				description: "Hi there!",
+				description: `Currently we have ${occupancy} rooms sold`,
 				start: {
-					date: event.date
+					date: date
 				},
 				end: {
-					date: event.date
+					date: date
 				}
 			};
 			const res = await calendar.events.insert({
@@ -60,9 +60,15 @@ const updateCalendar = async () => {
 
 			return res;
 		};
-		const updateEvent = async (event, id) => {
+		const updateEvent = async (
+			{ currentRoomNumber, roomSold, currentDescription },
+			id
+		) => {
 			const resource = {
-				description: event
+				description: `${currentDescription} <br>Update: Number changed from <strong>${currentRoomNumber}</strong> to <strong>${roomSold}</strong> rooms sold at ${moment().format(
+					"DD:MM:YYY hh:mm"
+				)}`,
+				summary: `${roomSold} Rooms Sold`
 			};
 			const res = await calendar.events.patch({
 				calendarId: "info.hotellaki@gmail.com",
@@ -81,19 +87,37 @@ const updateCalendar = async () => {
 		const findExistingEvents = eventList.data.items.filter(
 			e => e.creator && e.creator.email !== "info.hotellaki@gmail.com"
 		);
-		const test = findExistingEvents.reduce((acc, curr) => {
+		const toUpdate = findExistingEvents.reduce((acc, curr) => {
 			const toUpdate = res.data.find(e => e.date === curr.start.date);
 			if (toUpdate) {
 				const currentRoomNumber = parseInt(curr.summary.match(/\d+/g)[0]);
-				toUpdate.occupancy === currentRoomNumber
-					? console.log("tak")
-					: console.log("nie");
-				curr.description === "Hi there!"
-					? updateEvent("HELLLLOOOOOOO MOTHERFUCKA", curr.id)
+				currentRoomNumber !== toUpdate.occupancy
+					? updateEvent(
+							{
+								roomSold: toUpdate.occupancy,
+								currentRoomNumber,
+								currentDescription: curr.description
+							},
+							curr.id
+					  )
 					: false;
-				acc.push(currentRoomNumber);
+				acc.push(curr.start.date);
+				return acc;
 			}
 			return acc;
+		}, []);
+
+		const test = res.data.reduce((acc, curr) => {
+			const isExist = toUpdate.find(e => curr.date === e);
+			if (!isExist) {
+				addEvent({ occupancy: curr.occupancy, date: curr.date });
+				console.log("event created");
+			}
+			/* 	const x = testing.find(e => e.date !== curr.date);
+			if (!x) {
+				return [...acc, curr];
+			}
+			return acc; */
 		}, []);
 
 		return test;

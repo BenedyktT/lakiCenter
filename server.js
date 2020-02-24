@@ -39,6 +39,8 @@ app.listen(PORT, () => {
 		url: "http://laki-avail.herokuapp.com/", // url string
 		interval: 60000 * 25 // interval in milliseconds (1 minute in this example)
 	}).start();
-	schedule.scheduleJob("* 7 * * * *", () => console.log("dziala"));
+
 	console.log(`server start on port ${PORT}`);
 });
+
+/* schedule.scheduleJob("5 *1 * * * *", console.log("test")); */
