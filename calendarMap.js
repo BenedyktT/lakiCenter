@@ -2,8 +2,10 @@ const axios = require("axios");
 const moment = require("moment");
 const { google } = require("googleapis");
 const privatekey = require("./lakiconnect.js");
+const sendEmail = require("./sendMail");
 
 const updateCalendar = async () => {
+	let changes = [];
 	try {
 		//login
 		const data = { name: "adminlaki", password: process.env.adminPass };
@@ -12,10 +14,10 @@ const updateCalendar = async () => {
 		});
 		const today = moment().format("YYYY-MM-DD");
 		const monthFromToday = moment()
-			.add(10, "day")
+			.add(8, "month")
 			.format("YYYY-MM-DD");
 		const res = await axios.get(
-			`http://localhost:5000/availability/monthly/${today}/${monthFromToday}/LAKI/BDC`,
+			`http://lakicenter.com/availability/monthly/${today}/${monthFromToday}/LAKI/BDC`,
 			{ headers: { "x-auth-token": login.data } }
 		);
 		let jwtClient = new google.auth.JWT(
@@ -61,7 +63,7 @@ const updateCalendar = async () => {
 			return res;
 		};
 		const updateEvent = async (
-			{ currentRoomNumber, roomSold, currentDescription },
+			{ currentRoomNumber, roomSold, currentDescription, date },
 			id
 		) => {
 			const resource = {
@@ -75,79 +77,92 @@ const updateCalendar = async () => {
 				eventId: id,
 				resource
 			});
+			console.log("updated");
+			changes = [...changes, { date, from: currentRoomNumber, to: roomSold }];
 			return res;
 		};
 
 		let eventList = await calendar.events.list({
 			calendarId: "info.hotellaki@gmail.com",
+			singleEvents: true,
 			timeMin: moment().format(),
-
-			maxResults: 900
+			orderBy: "startTime",
+			maxResults: 99999
 		});
 		const findExistingEvents = eventList.data.items.filter(
-			e => e.creator && e.creator.email !== "info.hotellaki@gmail.com"
+			e =>
+				e.status !== "cancelled" &&
+				e.creator.email ===
+					"calendarconnect@lakiconnect.iam.gserviceaccount.com"
 		);
-		const toUpdate = findExistingEvents.reduce((acc, curr) => {
-			const toUpdate = res.data.find(e => e.date === curr.start.date);
-			if (toUpdate) {
-				const currentRoomNumber = parseInt(curr.summary.match(/\d+/g)[0]);
-				currentRoomNumber !== toUpdate.occupancy
-					? updateEvent(
-							{
-								roomSold: toUpdate.occupancy,
-								currentRoomNumber,
-								currentDescription: curr.description
-							},
-							curr.id
-					  )
-					: false;
-				acc.push(curr.start.date);
-				return acc;
+		res.data.reduce((acc, curr, i) => {
+			const isExist = findExistingEvents.find(e => curr.date === e.start.date);
+
+			if (!isExist) {
+				setTimeout(() => {
+					addEvent({ occupancy: curr.occupancy, date: curr.date });
+					console.log("event created");
+				}, i * 1000);
+				return [...acc, curr];
 			}
+
 			return acc;
 		}, []);
 
-		const test = res.data.reduce((acc, curr) => {
-			const isExist = toUpdate.find(e => curr.date === e);
-			if (!isExist) {
-				addEvent({ occupancy: curr.occupancy, date: curr.date });
-				console.log("event created");
+		const accUpdates = findExistingEvents.reduce((acc, curr) => {
+			const toUpdate = res.data.find(e => e.date === curr.start.date);
+			if (toUpdate) {
+				const currentRoomNumber = parseInt(curr.summary.match(/\d+/g)[0]);
+				if (currentRoomNumber !== toUpdate.occupancy) {
+					updateEvent(
+						{
+							roomSold: toUpdate.occupancy,
+							currentRoomNumber,
+							currentDescription: curr.description,
+							date: curr.start.date
+						},
+						curr.id
+					);
+					return [
+						...acc,
+						{
+							date: curr.start.date,
+							from: currentRoomNumber,
+							to: toUpdate.occupancy
+						}
+					];
+				}
+
+				return acc;
 			}
-			/* 	const x = testing.find(e => e.date !== curr.date);
-			if (!x) {
-				return [...acc, curr];
-			}
-			return acc; */
+
+			return acc;
 		}, []);
-
-		return test;
-
-		/* 	res.data.forEach((e, i) => {
-			setTimeout(async () => {
-				addEvent(e);
-			}, i * 500);
-		}); */
-
-		/* findEvents.forEach(async x => {
-			try {
-				await calendar.events.delete({
-					calendarId: "info.hotellaki@gmail.com",
-					eventId: x.id
-				});
-				console.log("deleted");
-			} catch (error) {
-				console.log(x.id);
-				console.error(error.response.status);
-			}
-		}); */
-
-		/* 		
-		; */
-
-		//Google Calendar API
+		sendEmail(accUpdates);
+		return accUpdates;
 	} catch (error) {
 		console.log(error);
 	}
 };
 
 module.exports = updateCalendar;
+
+/* return changes; */
+
+//delete all events
+/* 	findExistingEvents.forEach((x, i) => {
+			console.log("this.fire");
+			try {
+				setTimeout(() => {
+					calendar.events.delete({
+						calendarId: "info.hotellaki@gmail.com",
+						eventId: x.id
+					});
+					console.log("deleted");
+				}, i * 500);
+			} catch (error) {
+				console.log(error);
+			}
+		}); */
+
+//Google Calendar API
