@@ -9,15 +9,19 @@ const updateCalendar = async () => {
 	try {
 		//login
 		const data = { name: "adminlaki", password: process.env.adminPass };
-		const login = await axios.post("http://localhost:5000/user/login", data, {
-			headers: { "Content-Type": "application/json" }
-		});
+		const login = await axios.post(
+			"http://www.lakicenter.com/user/login",
+			data,
+			{
+				headers: { "Content-Type": "application/json" }
+			}
+		);
 		const today = moment().format("YYYY-MM-DD");
 		const monthFromToday = moment()
 			.add(8, "month")
 			.format("YYYY-MM-DD");
 		const res = await axios.get(
-			`http://lakicenter.com/availability/monthly/${today}/${monthFromToday}/LAKI/BDC`,
+			`http://www.lakicenter.com/availability/monthly/${today}/${monthFromToday}/LAKI/BDC`,
 			{ headers: { "x-auth-token": login.data } }
 		);
 		let jwtClient = new google.auth.JWT(
@@ -142,6 +146,10 @@ const updateCalendar = async () => {
 		return accUpdates;
 	} catch (error) {
 		console.log(error);
+		sendEmail(
+			null,
+			"error while updating calendar, Do not worry! I will try another time, if this error will be annoying and showing too often - time to contact Benedykt"
+		);
 	}
 };
 

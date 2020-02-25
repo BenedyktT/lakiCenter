@@ -39,7 +39,7 @@ app.listen(PORT, () => {
 		url: "http://laki-avail.herokuapp.com/", // url string
 		interval: 60000 * 25 // interval in milliseconds (1 minute in this example)
 	}).start();
-	schedule.scheduleJob("35 * * * *", async () => {
+	schedule.scheduleJob("46 * * * *", async () => {
 		console.log("test");
 		await updateCalendar();
 	});
