@@ -3,14 +3,14 @@ const moment = require("moment");
 const { google } = require("googleapis");
 const privatekey = require("./lakiconnect.js");
 const sendEmail = require("./sendMail");
-
+const PORT = process.env.PORT || 5000;
 const updateCalendar = async () => {
 	let changes = [];
 	try {
 		//login
 		const data = { name: "adminlaki", password: process.env.adminPass };
 		const login = await axios.post(
-			"http://www.lakicenter.com/user/login",
+			`http://localhost:${process.env.PORT}/user/login`,
 			data,
 			{
 				headers: { "Content-Type": "application/json" }
@@ -21,7 +21,7 @@ const updateCalendar = async () => {
 			.add(8, "month")
 			.format("YYYY-MM-DD");
 		const res = await axios.get(
-			`http://www.lakicenter.com/availability/monthly/${today}/${monthFromToday}/LAKI/BDC`,
+			`http://localhost:${process.env.PORT}/availability/monthly/${today}/${monthFromToday}/LAKI/BDC`,
 			{ headers: { "x-auth-token": login.data } }
 		);
 		let jwtClient = new google.auth.JWT(
