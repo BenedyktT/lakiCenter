@@ -1,3 +1,6 @@
+## App live:
+www.lakicenter.com
+
 This project aims to optimize hotel communication with travel agencies.
 Instead of sending an email with availability enquiry, partner can check live availability in this app
 
@@ -24,10 +27,7 @@ Instead of sending an email with availability enquiry, partner can check live av
 ### STACK
 MERN stack with custom sass styling
 
-## Biggest issues on the way
 
-1. This structure is prepared to deploy client and server from on place (for example heroku)
-   To not exceed project scope too much I decided to use create react app - which uses jest, because client has its own node_modules - using it main project triggered conflict. In order to fix it I needed to eject create-react-app, which allowed me to remove jest from client. More optimised way would to be to create webpack config manually.
 
 ## Cool things about it
 
